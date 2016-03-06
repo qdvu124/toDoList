@@ -1,0 +1,13 @@
+<!DOCTYPE html>
+<html lang="en">
+<div>
+    <h1><a href="/">Nah</a></h1>
+</div>
+
+{% for list_item in list %}
+    <div>
+        <button>Hi</button>
+        <p>dateTime: {{ list_item.dateTimeField|linebreaks }}</p>
+        <p>{{ list_item.textField|linebreaks }}</p>
+    </div>
+{% endfor %}
