@@ -4,10 +4,10 @@
     <h1><a href="/">To Do List Magic</a></h1>
 </div>
 
-{% for list_item in list %}
+{% for post in list %}
     <div>
-      <a hrefs="">Edit</a>
-        <p>dateTime: {{ list_item.deadline|linebreaks }}</p>
-        <p>{{ list_item.task|linebreaks }}</p>
+	<a href="{% url 'post_edit' pk=post.pk %}">{{ post.title }}Edit</a>
+        <p>dateTime: {{ post.deadline|linebreaks }}</p>
+        <p>{{ post.task|linebreaks }}</p>
     </div>
 {% endfor %}
