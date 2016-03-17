@@ -5,8 +5,8 @@ from django.shortcuts import redirect
 import logging
 
 # Create your views here.
-logger = logging.getLogger("view")
-LOG_FILENAME = 'example.log'
+logger = logging.getLogger("toDo/view.py")
+LOG_FILENAME = 'toDo.log'
 logging.basicConfig(filename=LOG_FILENAME, level=logging.DEBUG)
 logging.debug('This message should go to the log file')
 

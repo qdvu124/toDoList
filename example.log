@@ -1,5 +1,0 @@
-DEBUG:root:This message should go to the log file
-ERROR:view:Hey
-DEBUG:root:This message should go to the log file
-ERROR:view:Hey
-ERROR:view:Hey
