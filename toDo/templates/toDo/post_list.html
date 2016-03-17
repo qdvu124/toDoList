@@ -1,53 +1,19 @@
-<!doctype html>
-<html>
-
-<head>
-  <title>Post List</title>
-  <meta charset="utf-8" />
-  <meta http-equiv="Content-type" content="text/html; charset=utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <!-- Latest compiled and minified CSS -->
-  <link rel="stylesheet"
-  href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css"
-  integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7"
-  crossorigin="anonymous">
-
-  <!-- Optional theme -->
-  <link rel="stylesheet"
-  href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap-theme.min.css"
-  integrity="sha384-fLW2N01lMqjakBkx3l/M9EahuwpSfeNvV63J5ezn3uZzapT0u7EYsXMjQV+0En5r"
-  crossorigin="anonymous">
-
-  <!-- Latest compiled and minified JavaScript -->
-  <script
-  src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"
-  integrity="sha384-0mSbJDEHialfmuBBQP6A4Qrprq5OVfW37PRR3j5ELqxss1yVqOtnepnHVP9aJ7xS"
-  crossorigin="anonymous"></script>
-  <script
-  src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
-  <script
-  src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
-
-</head>
-<body>
-  <div>
-    <h1><a href="/">To Do List Magic</a></h1>
+{% extends 'toDo/base.html' %}
+{% block content %}
+<div>
     <a href="{% url 'post_new' %}" class="top-menu"><span class="glyphicon glyphicon-plus"></span></a>
-  </div>
+</div>
 
-  {% for post in list %}
-  <div>
-  <form method="POST" class="post-form" action="{% url 'post_delete' pk=post.pk %}">{% csrf_token %}
-        <button type="submit" class="save btn btn-default">Remove</button>
+{% for post in list %}
+{% if not post.isCompleted %}
+<div>
+    <a class="btn btn-default" href="{% url 'post_edit' pk=post.pk %}"><span class="glyphicon glyphicon-pencil"></span></a>
+    <form method="POST" class="post-form" action="{% url 'post_delete' pk=post.pk %}">{% csrf_token %}
+        <button type="submit" class="save btn btn-default"><span class="glyphicon glyphicon-remove"></span></button>
     </form>
-
-    <form method="POST" action="{% url 'post_delete' pk=post.pk %}">
-      <input type="submit" value="action:delete">
-    </form>
-   <a href="{% url 'post_detail' pk=post.pk %}">Edit</a>
-   <a href="{% url 'post_delete' pk=post.pk %}">Delete</a>
-   <p>dateTime: {{ post.deadline|linebreaks }}</p>
- </div>
- {% endfor %}
-</body>
-</html>
+    <p>Task: {{ post.task|linebreaks }}</p>
+    <p>Deadline: {{ post.deadline|linebreaks }}</p>
+</div>
+{% endif %}
+{% endfor %}
+{% endblock %}
