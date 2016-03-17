@@ -14,6 +14,15 @@
     <p>Task: {{ post.task|linebreaks }}</p>
     <p>Deadline: {{ post.deadline|linebreaks }}</p>
 </div>
+{% else %}
+<div style="color:grey;">
+    <a class="btn btn-default" href="{% url 'post_edit' pk=post.pk %}"><span class="glyphicon glyphicon-pencil"></span></a>
+    <form method="POST" class="post-form" action="{% url 'post_delete' pk=post.pk %}">{% csrf_token %}
+        <button type="submit" class="save btn btn-default"><span class="glyphicon glyphicon-remove"></span></button>
+    </form>
+    <p>Task: {{ post.task|linebreaks }}</p>
+    <p>Deadline: {{ post.deadline|linebreaks }}</p>
+</div>
 {% endif %}
 {% endfor %}
 {% endblock %}
