@@ -4,13 +4,20 @@ from .forms import EditTask
 from django.shortcuts import redirect
 
 # Create your views here.
+
 def post_list(request):
     list = toDoItem.objects.all()
-    return render(request,'toDo/post_list.html',{'list':list})
-
+    return render(request,'toDo/post_list.html',{'list':list}) 
+        
 def post_edit(request, pk):
     post = get_object_or_404(toDoItem, pk=pk)
     return render(request,'toDo/post_edit.html',{'post':post})
+
+def post_delete(request, pk):
+    post = get_object_or_404(toDoItem, pk=pk)
+    if request.method == "POST":
+        post.delete();
+    return redirect('post_list')
 
 def post_detail(request, pk):
     post = get_object_or_404(toDoItem, pk=pk)

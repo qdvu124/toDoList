@@ -33,13 +33,21 @@
   <div>
     <h1><a href="/">To Do List Magic</a></h1>
     <a href="{% url 'post_new' %}" class="top-menu"><span class="glyphicon glyphicon-plus"></span></a>
-</div>
+  </div>
 
-{% for post in list %}
-    <div>
-	<a href="{% url 'post_detail' pk=post.pk %}">{{ post.task }} Edit</a>
-        <p>dateTime: {{ post.deadline|linebreaks }}</p>
-    </div>
-{% endfor %}
-  </body>
-  </html>
+  {% for post in list %}
+  <div>
+  <form method="POST" class="post-form" action="{% url 'post_delete' pk=post.pk %}">{% csrf_token %}
+        <button type="submit" class="save btn btn-default">Remove</button>
+    </form>
+
+    <form method="POST" action="{% url 'post_delete' pk=post.pk %}">
+      <input type="submit" value="action:delete">
+    </form>
+   <a href="{% url 'post_detail' pk=post.pk %}">Edit</a>
+   <a href="{% url 'post_delete' pk=post.pk %}">Delete</a>
+   <p>dateTime: {{ post.deadline|linebreaks }}</p>
+ </div>
+ {% endfor %}
+</body>
+</html>
