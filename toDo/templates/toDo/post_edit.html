@@ -31,15 +31,13 @@
 </head>
 <body>
 <div>
-    <h1><a href="/">Nah</a></h1>
+    <h1><a href="/">{{post.task}}</a></h1>
 </div>
 
-{% for list_item in list %}
     <div>
         <button>Hi</button>
-        <p>dateTime: {{ list_item.deadline|linebreaks }}</p>
-        <p>{{ list_item.task|linebreaks }}</p>
+        <p>dateTime: {{ post.deadline|linebreaks }}</p>
+        <p>{{ post.task|linebreaks }}</p>
     </div>
-{% endfor %}
 </body>
 </html>
