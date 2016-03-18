@@ -4,6 +4,8 @@ from .forms import EditTask, LoginForm
 from django.shortcuts import redirect
 from django.utils import timezone
 import logging
+from django.contrib.sessions.models import Session
+from django.contrib.auth.models import User
 
 # Create your views here.
 logger = logging.getLogger(__name__)
@@ -54,10 +56,12 @@ def log_in(request):
     if request.method == "POST":
         form = LoginForm(request.POST)
         if request.POST['Login'] == "Login":
-            logger.error("Logged in")
             if form.is_valid():
                 user = form.save()
                 username = form.fields['username']
+                logger.error("Valid Form")
+                request.session['username']=username
+                logger.error(request.session.session_key)
         else:
             if form.is_valid():
                 username = form.fields['username']
