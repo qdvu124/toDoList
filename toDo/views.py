@@ -2,6 +2,7 @@ from django.shortcuts import render, get_object_or_404
 from .models import toDoItem
 from .forms import EditTask
 from django.shortcuts import redirect
+from django.utils import timezone
 import logging
 
 # Create your views here.
@@ -12,8 +13,8 @@ logging.debug('This message should go to the log file')
 
 
 def post_list(request):
-    list = toDoItem.objects.order_by('deadline')
-    return render(request, 'toDo/post_list.html', {'list': list})
+    list = toDoItem.objects.order_by('isCompleted','deadline')
+    return render(request, 'toDo/post_list.html', {'list': list, 'time':timezone.localtime(timezone.now())})
 
 
 def post_edit(request, pk):
@@ -24,7 +25,7 @@ def post_edit(request, pk):
 def post_delete(request, pk):
     post = get_object_or_404(toDoItem, pk=pk)
     if request.method == "POST":
-        post.isCompleted = True
+        post.isCompleted = not post.isCompleted
         post.save()
         if (post.isCompleted):
             logger.error("Hey")
