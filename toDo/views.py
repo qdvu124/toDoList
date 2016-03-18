@@ -4,11 +4,13 @@ from .forms import EditTask, LoginForm
 from django.shortcuts import redirect
 from django.utils import timezone
 import logging
+from django.views.decorators.cache import never_cache
 
 # Create your views here.
 logger = logging.getLogger(__name__)
 
 
+@never_cache
 def post_list(request):
     if request.session.get('user_id', None) is None:
         return redirect('login')
@@ -57,20 +59,21 @@ def post_edit(request, pk):
     return render(request, 'toDo/post_edit.html', {'form': form})
 
 
+@never_cache
 def log_in(request):
+    if request.session.get('user_id', None) is not None:
+        return redirect('post_list')
     if request.method == "POST":
         form = LoginForm(request.POST)
         if request.POST['Button'] == 'Register':
             if form.is_valid():
                 username = form.cleaned_data['username']
-                request.session['username'] = username
-                logger.error(request.session.session_key)
-                logger.error(request.session['username'])
+
                 userlist = User.objects.filter(username=username)
 
                 if userlist.count() == 0:
                     form.save()
-                    return render(request, 'toDo/post_list.html')
+                    return redirect('post_list')
         else:
             if form.is_valid():
                 username = form.cleaned_data['username']
@@ -83,6 +86,14 @@ def log_in(request):
                     form = LoginForm()
                     return render(request, 'toDo/login.html', {'form': form})
                 request.session['user_id'] = user.pk
-                return post_list(request)
+                request.session.set_expiry(15)
+                return redirect('post_list')
     form = LoginForm()
     return render(request, 'toDo/login.html', {'form': form})
+
+
+@never_cache
+def log_out(request):
+    request.session.clear()
+    # del request.session['user_id']
+    return redirect('login')

@@ -2,6 +2,7 @@
 {% block content %}
 <div class="post">
     <a href="{% url 'post_new' %}" class="top-menu"><span class="glyphicon glyphicon-plus"></span></a>
+    <a href="{% url 'logout' %}" class="top-menu"><span class="glyphicon glyphicon-log-out"></span>Logout</a>
 </div>
 {% for post in list %}
 <div class="{% if not post.isCompleted %}notFinished{% elif post.deadline < time %}passed {% else %} finished {% endif %} post">

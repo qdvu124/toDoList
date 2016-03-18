@@ -48,6 +48,7 @@ MIDDLEWARE_CLASSES = (
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     'django.middleware.security.SecurityMiddleware',
+    'toDo.middleware.LoginRequiredMiddleware',
 )
 
 ROOT_URLCONF = 'mysite.urls'
@@ -109,6 +110,10 @@ TEMPLATES = [
         },
     },
 ]
+
+TEMPLATE_CONTEXT_PROCESSORS = (
+    'django.core.context_processors.request',
+)
 
 SESSION_SERIALIZER = 'django.contrib.sessions.serializers.PickleSerializer'
 
