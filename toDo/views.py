@@ -1,6 +1,6 @@
 from django.shortcuts import render, get_object_or_404
-from .models import toDoItem
-from .forms import EditTask
+from .models import ToDoItem, User
+from .forms import EditTask, LoginForm
 from django.shortcuts import redirect
 import logging
 
@@ -11,23 +11,21 @@ logging.basicConfig(filename=LOG_FILENAME, level=logging.DEBUG)
 logging.debug('This message should go to the log file')
 
 
-def post_list(request):
-    list = toDoItem.objects.order_by('deadline')
+def post_list(request, username):
+    list = ToDoItem.objects.filter(username=username)
     return render(request, 'toDo/post_list.html', {'list': list})
 
 
 def post_edit(request, pk):
-    post = get_object_or_404(toDoItem, pk=pk)
+    post = get_object_or_404(ToDoItem, pk=pk)
     return render(request, 'toDo/post_edit.html', {'post': post})
 
 
 def post_delete(request, pk):
-    post = get_object_or_404(toDoItem, pk=pk)
+    post = get_object_or_404(ToDoItem, pk=pk)
     if request.method == "POST":
-        post.isCompleted = True
+        post.isCompleted = not post.isCompleted
         post.save()
-        if (post.isCompleted):
-            logger.error("Hey")
     return redirect('post_list')
 
 
@@ -43,7 +41,7 @@ def post_new(request):
 
 
 def post_edit(request, pk):
-    post = get_object_or_404(toDoItem, pk=pk)
+    post = get_object_or_404(ToDoItem, pk=pk)
     if request.method == "POST":
         form = EditTask(request.POST, instance=post)
         if form.is_valid():
@@ -52,3 +50,20 @@ def post_edit(request, pk):
     else:
         form = EditTask(instance=post)
     return render(request, 'toDo/post_edit.html', {'form': form})
+
+
+def log_in(request):
+    logger.error("Hey")
+    if request.method == "POST":
+        form = LoginForm(request.POST)
+        if request.POST['Login'] == "Login":
+            logger.error("Logged in")
+            if form.is_valid():
+                user = form.save()
+                username = form.fields['username']
+        else:
+            if form.is_valid():
+                username = form.fields['username']
+        return render(request, 'toDo/post_list.html', {'username': username})
+    form = LoginForm()
+    return render(request, 'toDo/login.html', {'form': form})
