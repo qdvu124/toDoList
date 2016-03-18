@@ -4,9 +4,11 @@ from .models import ToDoItem, User
 
 
 class EditTask(forms.ModelForm):
+    user = forms.IntegerField(widget=forms.HiddenInput())
+
     class Meta:
         model = ToDoItem
-        fields = ('task', 'deadline',)
+        fields = ('task', 'deadline', 'user',)
 
     def __init__(self, *args, **kwargs):
         super(EditTask, self).__init__(*args, **kwargs)

@@ -10,10 +10,9 @@ logger = logging.getLogger(__name__)
 
 
 def post_list(request):
-    a = request.session.get('user_id', None)
-    if a == None:
+    if request.session.get('user_id', None) is None:
         return redirect('login')
-    list = ToDoItem.objects.filter(user_id=a)
+    list = ToDoItem.objects.filter(user_id=request.session.get('user_id'))
     return render(request, 'toDo/post_list.html', {'list': list, 'time': timezone.localtime(timezone.now())})
 
 
@@ -31,13 +30,18 @@ def post_delete(request, pk):
 
 
 def post_new(request):
+    if request.session.get('user_id', None) is None:
+        return redirect('login')
+    current_user = get_object_or_404(User, username=request.session['username'])
     if request.method == "POST":
         form = EditTask(request.POST)
         if form.is_valid():
-            post = form.save()
+            post = form.save(commit=False)
+            post.user = current_user.pk
+            post.save()
             return redirect('post_list')
     else:
-        form = EditTask()
+        form = EditTask(initial={'user': current_user.pk})
     return render(request, 'toDo/post_edit.html', {'form': form})
 
 
@@ -71,6 +75,9 @@ def log_in(request):
             if form.is_valid():
                 username = form.cleaned_data['username']
                 password = form.cleaned_data['password']
+                request.session['username'] = username
+                logger.error(request.session.session_key)
+                logger.error(request.session['username'])
                 user = get_object_or_404(User, username=username)
                 if password != user.password:
                     form = LoginForm()
