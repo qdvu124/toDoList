@@ -6,10 +6,7 @@ from django.utils import timezone
 import logging
 
 # Create your views here.
-logger = logging.getLogger("toDo/view.py")
-LOG_FILENAME = 'toDo.log'
-logging.basicConfig(filename=LOG_FILENAME, level=logging.DEBUG)
-logging.debug('This message should go to the log file')
+logger = logging.getLogger(__name__)
 
 def post_list(request, username):
     list = ToDoItem.objects.filter(username=username)

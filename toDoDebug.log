@@ -1,0 +1,35 @@
+[18/Mar/2016 12:35:16] DEBUG [django.db.backends:89] (0.000) 
+            SELECT name, type FROM sqlite_master
+            WHERE type in ('table', 'view') AND NOT name='sqlite_sequence'
+            ORDER BY name; args=None
+[18/Mar/2016 12:35:16] DEBUG [django.db.backends:89] (0.000) SELECT "django_migrations"."app", "django_migrations"."name" FROM "django_migrations"; args=()
+[18/Mar/2016 12:35:28] DEBUG [django.db.backends:89] (0.000) BEGIN; args=None
+[18/Mar/2016 12:35:28] DEBUG [django.db.backends:89] (0.001) INSERT INTO "toDo_user" ("username", "password") VALUES ('a', 'a'); args=['a', 'a']
+[18/Mar/2016 12:35:28] DEBUG [django.template:923] Exception while resolving variable 'list' in template 'toDo/post_list.html'.
+Traceback (most recent call last):
+  File "/Users/blacksteed232/Developer/Django/toDoList/venv/lib/python3.5/site-packages/django/template/base.py", line 879, in _resolve_lookup
+    current = current[bit]
+  File "/Users/blacksteed232/Developer/Django/toDoList/venv/lib/python3.5/site-packages/django/template/context.py", line 77, in __getitem__
+    raise KeyError(key)
+KeyError: 'list'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/Users/blacksteed232/Developer/Django/toDoList/venv/lib/python3.5/site-packages/django/template/base.py", line 885, in _resolve_lookup
+    if isinstance(current, BaseContext) and getattr(type(current), bit):
+AttributeError: type object 'RequestContext' has no attribute 'list'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/Users/blacksteed232/Developer/Django/toDoList/venv/lib/python3.5/site-packages/django/template/base.py", line 894, in _resolve_lookup
+    current = current[int(bit)]
+ValueError: invalid literal for int() with base 10: 'list'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/Users/blacksteed232/Developer/Django/toDoList/venv/lib/python3.5/site-packages/django/template/base.py", line 901, in _resolve_lookup
+    (bit, current))  # missing attribute
+django.template.base.VariableDoesNotExist: Failed lookup for key [list] in '[{\'False\': False, \'True\': True, \'None\': None}, {\'DEFAULT_MESSAGE_LEVELS\': {\'SUCCESS\': 25, \'ERROR\': 40, \'DEBUG\': 10, \'INFO\': 20, \'WARNING\': 30}, \'perms\': <django.contrib.auth.context_processors.PermWrapper object at 0x103b8c518>, \'user\': <SimpleLazyObject: <function AuthenticationMiddleware.process_request.<locals>.<lambda> at 0x103b4eb70>>, \'csrf_token\': <SimpleLazyObject: <function csrf.<locals>._get_val at 0x103b6f400>>, \'request\': <WSGIRequest: POST \'/login/\'>, \'messages\': <django.contrib.messages.storage.fallback.FallbackStorage object at 0x103b5b470>}, {}, {\'username\': <django.forms.fields.CharField object at 0x103b67f28>}, {\'block\': <Block Node: content. Contents: [<TextNode: \'\\n<div class="post">\\n  <a \'>, <django.template.defaulttags.URLNode object at 0x103b85358>, <TextNode: \'" class="top-menu"><span \'>, <For Node: for post in list, tail_len: 15>, <TextNode: \'\\n\'>]>}, {}]'
