@@ -1,18 +1,19 @@
 {% extends 'toDo/base.html' %}
 {% block content %}
 <div class="post">
-  <a href="{% url 'post_new' %}" class="top-menu"><span class="glyphicon glyphicon-plus"></span></a>
+    <a href="{% url 'post_new' %}" class="top-menu"><span class="glyphicon glyphicon-plus"></span></a>
 </div>
 {% for post in list %}
-<div class= "{% if not post.isCompleted %}notFinished{% elif post.deadline < time %}passed {% else %} finished {% endif %} post">
-  <form method="POST" class="post-form" action="{% url 'post_delete' pk=post.pk %}">{% csrf_token %}
-    <button type="submit" class="save btn btn-default"><span class="glyphicon glyphicon-remove"></span></button>
-  </form>
-  <div>{{time}}</div>
-  <div class="task-title">{{post.task}}</div>
-  <div class="lead">{{post.deadline}}</div>
-  <div><a class="btn btn-default" href="{% url 'post_edit' pk=post.pk %}"><span class="glyphicon glyphicon-pencil"></span></a>
-  </div>
+<div class="{% if not post.isCompleted %}notFinished{% elif post.deadline < time %}passed {% else %} finished {% endif %} post">
+    <form method="POST" class="post-form" action="{% url 'post_delete' pk=post.pk %}">{% csrf_token %}
+        <button type="submit" class="save btn btn-default"><span class="glyphicon glyphicon-remove"></span></button>
+    </form>
+    <div>{{time}}</div>
+    <div class="task-title">{{post.task}}</div>
+    <div class="lead">{{post.deadline}}</div>
+    <div><a class="btn btn-default" href="{% url 'post_edit' pk=post.pk %}"><span
+            class="glyphicon glyphicon-pencil"></span></a>
+    </div>
 </div>
 {% endfor %}
 {% endblock %}

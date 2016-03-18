@@ -2,7 +2,6 @@
 __pycache__
 db.sqlite3
 venv
-toDo.log
-toDoDebug.log
+*.log
 /static
 .DS_Store
