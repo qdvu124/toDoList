@@ -8,9 +8,10 @@ import logging
 # Create your views here.
 logger = logging.getLogger(__name__)
 
-def post_list(request, username):
-    list = ToDoItem.objects.filter(username=username)
-    return render(request, 'toDo/post_list.html', {'list': list, 'time':timezone.localtime(timezone.now())})
+
+def post_list(request, user):
+    list = ToDoItem.objects.filter(user_id=user)
+    return render(request, 'toDo/post_list.html', {'list': list, 'time': timezone.localtime(timezone.now())})
 
 
 def post_edit(request, pk):
@@ -50,17 +51,23 @@ def post_edit(request, pk):
 
 
 def log_in(request):
-    logger.error("Hey")
     if request.method == "POST":
         form = LoginForm(request.POST)
-        if request.POST['Login'] == "Login":
-            logger.error("Logged in")
+        if request.POST['Button'] == 'Register':
             if form.is_valid():
-                user = form.save()
-                username = form.fields['username']
+                username = form.cleaned_data['username']
+                userlist = User.objects.filter(username=username)
+                if userlist.count() == 0:
+                    form.save()
+                    return render(request, 'toDo/post_list.html', {'username': username})
         else:
             if form.is_valid():
-                username = form.fields['username']
-        return render(request, 'toDo/post_list.html', {'username': username})
+                username = form.cleaned_data['username']
+                password = form.cleaned_data['password']
+                user = get_object_or_404(User, username=username)
+                if password != user.password:
+                    form = LoginForm()
+                    return render(request, 'toDo/login.html', {'form': form})
+                return post_list(request, user.pk)
     form = LoginForm()
     return render(request, 'toDo/login.html', {'form': form})
