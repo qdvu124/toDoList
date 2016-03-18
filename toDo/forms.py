@@ -4,7 +4,6 @@ from .models import ToDoItem, User
 
 
 class EditTask(forms.ModelForm):
-    user = forms.IntegerField(widget=forms.HiddenInput())
 
     class Meta:
         model = ToDoItem
