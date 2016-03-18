@@ -4,15 +4,16 @@ from .forms import EditTask, LoginForm
 from django.shortcuts import redirect
 from django.utils import timezone
 import logging
-from django.contrib.sessions.models import Session
-from django.contrib.auth.models import User
 
 # Create your views here.
 logger = logging.getLogger(__name__)
 
 
-def post_list(request, user):
-    list = ToDoItem.objects.filter(user_id=user)
+def post_list(request):
+    a = request.session.get('user_id', None)
+    if a == None:
+        return redirect('login')
+    list = ToDoItem.objects.filter(user_id=a)
     return render(request, 'toDo/post_list.html', {'list': list, 'time': timezone.localtime(timezone.now())})
 
 
@@ -58,12 +59,14 @@ def log_in(request):
         if request.POST['Button'] == 'Register':
             if form.is_valid():
                 username = form.cleaned_data['username']
-                request.session['username']=username
+                request.session['username'] = username
                 logger.error(request.session.session_key)
+                logger.error(request.session['username'])
                 userlist = User.objects.filter(username=username)
+
                 if userlist.count() == 0:
                     form.save()
-                    return render(request, 'toDo/post_list.html', {'username': username})
+                    return render(request, 'toDo/post_list.html')
         else:
             if form.is_valid():
                 username = form.cleaned_data['username']
@@ -72,6 +75,7 @@ def log_in(request):
                 if password != user.password:
                     form = LoginForm()
                     return render(request, 'toDo/login.html', {'form': form})
-                return post_list(request, user.pk)
+                request.session['user_id'] = user.pk
+                return post_list(request)
     form = LoginForm()
     return render(request, 'toDo/login.html', {'form': form})
