@@ -39,11 +39,11 @@ def post_new(request):
         form = EditTask(request.POST)
         if form.is_valid():
             post = form.save(commit=False)
-            post.user = current_user.pk
+            post.user_id = current_user
             post.save()
             return redirect('post_list')
     else:
-        form = EditTask(initial={'user': current_user.pk})
+        form = EditTask()
     return render(request, 'toDo/post_edit.html', {'form': form})
 
 
@@ -86,7 +86,7 @@ def log_in(request):
                     form = LoginForm()
                     return render(request, 'toDo/login.html', {'form': form})
                 request.session['user_id'] = user.pk
-                request.session.set_expiry(15)
+                request.session.set_expiry(300)
                 return redirect('post_list')
     form = LoginForm()
     return render(request, 'toDo/login.html', {'form': form})
