@@ -5,7 +5,6 @@
     <h1>Editing task</h1>
     <form method="POST" class="post-form">{% csrf_token %}
         {{ form.as_p }}
-        {{ form.user.as_hidden}}
         <button type="submit" class="save btn btn-default">Save</button>
     </form>
 </div>

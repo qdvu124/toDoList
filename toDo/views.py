@@ -43,7 +43,7 @@ def post_new(request):
             post.save()
             return redirect('post_list')
     else:
-        form = EditTask(initial={'user': current_user.pk})
+        form = EditTask()
     return render(request, 'toDo/post_edit.html', {'form': form})
 
 
