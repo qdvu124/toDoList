@@ -5,6 +5,7 @@ from django.shortcuts import redirect
 from django.utils import timezone
 import logging
 from django.views.decorators.cache import never_cache
+from django.core.exceptions import ObjectDoesNotExist
 
 # Create your views here.
 logger = logging.getLogger(__name__)
@@ -78,12 +79,15 @@ def log_in(request):
             if form.is_valid():
                 username = form.cleaned_data['username']
                 password = form.cleaned_data['password']
+                form = LoginForm(initial = {'username':username})
                 request.session['username'] = username
                 logger.error(request.session.session_key)
                 logger.error(request.session['username'])
-                user = get_object_or_404(User, username=username)
+                try:
+                    user = User.objects.get(username=username)
+                except (ValueError, ObjectDoesNotExist):
+                    return render(request, 'toDo/login.html', {'form': form})
                 if password != user.password:
-                    form = LoginForm()
                     return render(request, 'toDo/login.html', {'form': form})
                 request.session['user_id'] = user.pk
                 request.session.set_expiry(300)
