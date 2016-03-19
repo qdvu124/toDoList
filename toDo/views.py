@@ -66,34 +66,40 @@ def log_in(request):
         return redirect('post_list')
     if request.method == "POST":
         form = LoginForm(request.POST)
-        if request.POST['Button'] == 'Register':
-            if form.is_valid():
-                username = form.cleaned_data['username']
-
-                userlist = User.objects.filter(username=username)
-
-                if userlist.count() == 0:
-                    form.save()
-                    return redirect('post_list')
-        else:
-            if form.is_valid():
-                username = form.cleaned_data['username']
-                password = form.cleaned_data['password']
-                form = LoginForm(initial = {'username':username})
-                request.session['username'] = username
-                logger.error(request.session.session_key)
-                logger.error(request.session['username'])
-                try:
-                    user = User.objects.get(username=username)
-                except (ValueError, ObjectDoesNotExist):
-                    return render(request, 'toDo/login.html', {'form': form})
-                if password != user.password:
-                    return render(request, 'toDo/login.html', {'form': form})
-                request.session['user_id'] = user.pk
-                request.session.set_expiry(300)
-                return redirect('post_list')
+        if form.is_valid():
+            username = form.cleaned_data['username']
+            password = form.cleaned_data['password']
+            form = LoginForm(initial={'username': username})
+            request.session['username'] = username
+            try:
+                user = User.objects.get(username=username)
+            except (ValueError, ObjectDoesNotExist):
+                return render(request, 'toDo/login.html', {'form': form})
+            if password != user.password:
+                return render(request, 'toDo/login.html', {'form': form})
+            request.session['user_id'] = user.pk
+            request.session.set_expiry(300)
+            return redirect('post_list')
     form = LoginForm()
     return render(request, 'toDo/login.html', {'form': form})
+
+
+@never_cache
+def register(request):
+    if request.session.get('user_id', None) is not None:
+        return redirect('post_list')
+    if request.method == "POST":
+        form = LoginForm(request.POST)
+        if form.is_valid():
+            username = form.cleaned_data['username']
+            userlist = User.objects.filter(username=username)
+            if userlist.count() == 0:
+                form.save()
+                request.session['username'] = username
+                request.session['user_id'] = get_object_or_404(User, username=username).pk
+                return redirect('post_list')
+    form = LoginForm()
+    return render(request, 'toDo/register.html', {'form': form})
 
 
 @never_cache
