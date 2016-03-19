@@ -14,7 +14,7 @@ class User(models.Model):
 
 
 class ToDoItem(models.Model):
-    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    user = models.ForeignKey(User, on_delete=models.CASCADE, db_column='user_ID')
     task = models.CharField(max_length=200, default='')
     deadline = models.DateTimeField(default=timezone.now)
     isCompleted = models.BooleanField(default=False)

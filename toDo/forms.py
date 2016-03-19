@@ -7,7 +7,7 @@ class EditTask(forms.ModelForm):
 
     class Meta:
         model = ToDoItem
-        fields = ('task', 'deadline',)
+        fields = ('task', 'deadline')
 
     def __init__(self, *args, **kwargs):
         super(EditTask, self).__init__(*args, **kwargs)

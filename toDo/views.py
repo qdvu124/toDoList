@@ -39,7 +39,7 @@ def post_new(request):
         form = EditTask(request.POST)
         if form.is_valid():
             post = form.save(commit=False)
-            post.user_id = current_user.pk
+            post.user = current_user
             post.save()
             return redirect('post_list')
     else:
